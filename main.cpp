@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 #include <locale.h>
 #include <string.h>
 #include <cmath>
 #include <iostream>
 #include "set_of_numbers.h"
+//#include "set_of_numbers.cpp"
 using namespace std;
 
 int main()
 {
-    setlocale( LC_ALL, "Russian" );
+    SetConsoleCP( 1251 );
+    SetConsoleOutputCP( 1251 );
     while ( true )
     {
 
@@ -51,6 +54,13 @@ int main()
 
             }
         }
+
+        cout << endl << "Первое множество: " << endl;
+        set_1.print();
+        cout << "Второе множество: " << endl;
+        set_2.print();
+        cout << endl;
+
 
         double choice;
 

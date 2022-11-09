@@ -1,11 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 #include <locale.h>
 #include <string.h>
 #include <cmath>
 #include <iostream>
 #include "set_of_numbers.h"
 using namespace std;
+
+set_of_numbers::~set_of_numbers()
+{
+
+    delete [] array;
+
+}
 
 int set_of_numbers::presence ( const int& number ) const
 {
@@ -29,7 +37,7 @@ int & set_of_numbers::operator [] ( const int& index ) const
 
 } // Обращение по индексу
 
-set_of_numbers::set_of_numbers ( int size = 0 )
+set_of_numbers::set_of_numbers ( int size )
 {
             
     if ( size < 0 ) throw "Размерность не может быть отрицательной";
@@ -71,6 +79,21 @@ set_of_numbers::set_of_numbers ( int size = 0 )
     }
 
 } // Конструктор
+
+set_of_numbers::set_of_numbers ( const set_of_numbers & other_set )
+{
+
+    this->size = other_set.size;
+    this->count = other_set.count;
+    this->array = new int[this->size];
+    for (int i = 0; i < this->count; i++)
+    {
+
+        this->array[i] = other_set.array[i];
+
+    }
+
+}
 
 void set_of_numbers::operator = ( const set_of_numbers & other_set )
 {
