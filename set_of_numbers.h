@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
+//#include <windows.h>
 #include <locale.h>
 #include <string.h>
 #include <cmath>
 #include <iostream>
+using namespace std;
 //#pragma once
 #ifndef FILE_H
 #define FILE_H
@@ -36,11 +37,9 @@ class set_of_numbers
 
         void delete_ ( const int& number );
 
-        void print( ) const;
+        set_of_numbers operator + ( const set_of_numbers & set_1 );
 
-        set_of_numbers & operator + ( const set_of_numbers & set_1 );
-
-        set_of_numbers & operator - ( const set_of_numbers & set_1 );
+        set_of_numbers operator - ( const set_of_numbers & set_1 );
 
         void operator + ( const int & number );
 
@@ -50,13 +49,15 @@ class set_of_numbers
 
         void operator -= ( const int & number );
 
-        set_of_numbers & intersection ( const set_of_numbers & set_2 ) const;
+        set_of_numbers intersection ( const set_of_numbers & set_2 ) const;
 
         bool operator == ( const set_of_numbers & set_2 ) const;
 
         bool operator != ( const set_of_numbers & set_2 ) const;
 
         bool occurrence_of_elements( const set_of_numbers & set_2 ) const;
+
+        friend ostream& operator << ( ostream& os, const set_of_numbers& set );
 
 };
 #endif

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <windows.h>
+#include <windows.h>
 #include <locale.h>
 #include <string.h>
 #include <cmath>
@@ -8,92 +8,56 @@
 #include "set_of_numbers.h"
 using namespace std;
 
-set_of_numbers::~set_of_numbers()
+template<typename T>
+set_of_numbers<T>::~set_of_numbers()
 {
 
-    delete [] array;
+    delete[] array;
 
 }
 
-int set_of_numbers::presence ( const int& number ) const
+template<typename T>
+int set_of_numbers<T>::presence( const T& number ) const
 {
 
     for ( int i = 0; i < this->count; i++ )
-        {
+    {
 
-            if ( this->array[i] == number )
+        if ( this->array[i] == number )
             return i;
 
-        }
-        return -1;
+    }
+    return -1;
 
-} // Ïðîâåðêà íàëè÷èÿ
+}
 
-int & set_of_numbers::operator [] ( const int& index ) const
+template<typename T>
+T& set_of_numbers<T>::operator [] ( const int& index ) const
 {
 
     if ( index > count - 1 || index < 0 ) throw "Not correct index\n";
     return array[index];
 
-} // Îáðàùåíèå ïî èíäåêñó
+}
 
-set_of_numbers::set_of_numbers ( int size )
+template<typename T>
+set_of_numbers<T>::set_of_numbers( int size )
 {
-            
-    if ( size < 0 ) throw "Size can't be negative";
+
     this->size = size;
     count = 0;
-    array = new int[size];
-    for ( int i = 0; i < size; i++ )
-    {
+    array = new T[size];
 
-        while ( 1 )
-        {
+}
 
-            double number;
-            cout << "Enter integer: ";
-            while( !( cin >> number ) || ( cin.peek() != '\n' ) )
-            {
-
-                cin.clear();
-                while ( cin.get() != '\n' );
-                cout << "Text was entered";
-
-            } 
-            if ( double( int( number ) ) != number )
-            {
-
-                cout << "The number " << number << " isn't integer" << endl;
-
-            }
-            else if ( this->presence( number ) != -1 )
-            {
-
-                cout << "The number " << number << " isn't unic" << endl;
-
-            }
-            else
-            {
-
-                array[i] = int( number );
-                count++;
-                break;
-
-            }
-
-        }
-
-    }
-
-} // Êîíñòðóêòîð
-
-set_of_numbers::set_of_numbers ( const set_of_numbers & other_set )
+template<typename T>
+set_of_numbers<T>::set_of_numbers( const set_of_numbers<T>& other_set )
 {
 
     this->size = other_set.size;
     this->count = other_set.count;
-    this->array = new int[this->size];
-    for (int i = 0; i < this->count; i++)
+    this->array = new T[this->size];
+    for ( int i = 0; i < this->count; i++ )
     {
 
         this->array[i] = other_set.array[i];
@@ -102,12 +66,13 @@ set_of_numbers::set_of_numbers ( const set_of_numbers & other_set )
 
 }
 
-void set_of_numbers::operator = ( const set_of_numbers & other_set )
+template<typename T>
+void set_of_numbers<T>::operator = ( const set_of_numbers<T>& other_set )
 {
 
     this->size = other_set.size;
     this->count = other_set.count;
-    this->array = new int[this->size];
+    this->array = new T[this->size];
     for ( int i = 0; i < other_set.count; i++ )
     {
 
@@ -117,53 +82,54 @@ void set_of_numbers::operator = ( const set_of_numbers & other_set )
 
 }
 
-void set_of_numbers::add ( const int & number )
+template<typename T>
+void set_of_numbers<T>::add( const T& number )
 {
 
-    if ( this->presence( number ) != -1 ) throw "The number isn't unic\n";
-    else if ( double( int( number ) ) != number ) throw "The number isn't integer\n";
+    if ( this->presence( number ) != -1 ) throw "The value isn't unic\n";
     if ( this->count == this->size )
     {
 
-        int* old_arr = new int [this->size];
+        T* old_arr = new T[this->size];
         for ( int k = 0; k < this->count; k++ )
         {
 
             old_arr[k] = this->array[k];
 
         }
-        this->array = new int[this->size + 10];
+        this->array = new T[this->size + 10];
         for ( int k = 0; k < this->count; k++ )
         {
 
             this->array[k] = old_arr[k];
 
-            }
-            this->size += 10;
-            delete[] old_arr;
-            this->array[count++] = number;
+        }
+        this->size += 10;
+        delete[] old_arr;
+        this->array[count++] = number;
 
     }
 
     else this->array[count++] = number;
 
-} // Äîáàâëåíèå ÷èñëà â ìàññèâ
+} 
 
-void set_of_numbers::delete_ ( const int& number )
+template<typename T>
+void set_of_numbers<T>::delete_( const T& number )
 {
 
     int value = this->presence( number );
     if ( value != -1 )
     {
 
-        int * old_arr = new int[this->size];
+        T* old_arr = new T[this->size];
         for ( int k = 0; k < this->size; k++ )
         {
 
             old_arr[k] = this->array[k];
 
         }
-        this->array = new int[--this->size];
+        this->array = new T[--this->size];
         for ( int k = 0; k < value; k++ )
         {
 
@@ -182,14 +148,15 @@ void set_of_numbers::delete_ ( const int& number )
     }
     else throw "The set doesn't contain such a number\n";
 
-} // Óäàëåíèå ÷èñëà èç ìàññèâà
+} 
 
-set_of_numbers set_of_numbers::operator + ( const set_of_numbers& set_1 )
+template<typename T>
+set_of_numbers<T> set_of_numbers<T>::operator + ( const set_of_numbers<T>& set_1 )
 {
 
-    set_of_numbers new_set( 0 );
+    set_of_numbers<T> new_set( 0 );
     new_set.size = this->count + set_1.count;
-    new_set.array = new int[new_set.size];
+    new_set.array = new T[new_set.size];
     for ( int i = 0; i < this->count; i++ )
     {
 
@@ -200,7 +167,7 @@ set_of_numbers set_of_numbers::operator + ( const set_of_numbers& set_1 )
     for ( int i = 0; i < set_1.count; i++ )
     {
 
-        if ( ( this->presence( set_1.array[i] ) ) == -1 )
+        if ( ( this->presence( set_1.array[i] ) ) == -1)
         {
 
             new_set.array[new_set.count++] = set_1.array[i];
@@ -210,12 +177,13 @@ set_of_numbers set_of_numbers::operator + ( const set_of_numbers& set_1 )
     }
     return new_set;
 
-} // Ñëîæåíèå äâóõ ìàññèâîâ
+} 
 
-set_of_numbers set_of_numbers::operator - ( const set_of_numbers & set_1 )
+template<typename T>
+set_of_numbers<T> set_of_numbers<T>::operator - ( const set_of_numbers<T>& set_1 )
 {
 
-    set_of_numbers new_set( 0 );
+    set_of_numbers<T> new_set( 0 );
     new_set = *this;
     for ( int i = 0; i < set_1.count; i++ )
     {
@@ -226,7 +194,7 @@ set_of_numbers set_of_numbers::operator - ( const set_of_numbers & set_1 )
             new_set.delete_( set_1.array[i] );
 
         }
-        catch ( const char * e )
+        catch ( const char* e )
         {
 
             continue;
@@ -241,10 +209,11 @@ set_of_numbers set_of_numbers::operator - ( const set_of_numbers & set_1 )
 
     }
     return new_set;
-            
-} // Âû÷èòàíèå äâóõ ìàññèâîâ
 
-void set_of_numbers::operator + ( const int & number )
+}
+
+template<typename T>
+void set_of_numbers<T>::operator + ( const T& number )
 {
 
     try
@@ -253,7 +222,7 @@ void set_of_numbers::operator + ( const int & number )
         this->add( number );
 
     }
-    catch ( const char * e )
+    catch ( const char* e )
     {
 
         throw "The set already contains such a value\n";
@@ -266,18 +235,19 @@ void set_of_numbers::operator + ( const int & number )
 
     }
 
-} // Ïðèáàâèòü ÷èñëî â ìàññèâ
+} 
 
-void set_of_numbers::operator += ( const int & number )
+template<typename T>
+void set_of_numbers<T>::operator += ( const T& number )
 {
-    
+
     try
     {
 
         this->add( number );
 
     }
-    catch ( const char * e )
+    catch (const char* e)
     {
 
         throw "The set already contains such a value\n";
@@ -290,9 +260,10 @@ void set_of_numbers::operator += ( const int & number )
 
     }
 
-} // Ïðèáàâèòü ÷èñëî â ìàññèâ
+}
 
-void set_of_numbers::operator - ( const int & number )
+template<typename T>
+void set_of_numbers<T>::operator - ( const T& number )
 {
 
     try
@@ -301,7 +272,7 @@ void set_of_numbers::operator - ( const int & number )
         this->delete_( number );
 
     }
-    catch ( const char * e )
+    catch ( const char* e )
     {
 
         throw e;
@@ -314,9 +285,10 @@ void set_of_numbers::operator - ( const int & number )
 
     }
 
-} // Óäàëèòü ÷èñëî èç ìàññèâà
+}
 
-void set_of_numbers::operator -= ( const int & number )
+template<typename T>
+void set_of_numbers<T>::operator -= ( const T& number )
 {
 
     try
@@ -325,7 +297,7 @@ void set_of_numbers::operator -= ( const int & number )
         this->delete_( number );
 
     }
-    catch ( const char * e )
+    catch ( const char* e )
     {
 
         throw e;
@@ -338,12 +310,13 @@ void set_of_numbers::operator -= ( const int & number )
 
     }
 
-} // Óäàëèòü ÷èñëî èç ìàññèâà
+}
 
-set_of_numbers set_of_numbers::intersection ( const set_of_numbers & set_2 ) const
+template<typename T>
+set_of_numbers<T> set_of_numbers<T>::intersection( const set_of_numbers<T>& set_2 ) const
 {
 
-    set_of_numbers new_arr( 0 );
+    set_of_numbers<T> new_arr( 0 );
     for ( int i = 0; i < this->count; i++ )
     {
 
@@ -352,9 +325,10 @@ set_of_numbers set_of_numbers::intersection ( const set_of_numbers & set_2 ) con
     }
     return new_arr;
 
-} // Ïåðåñå÷åíèå
+} 
 
-bool set_of_numbers::operator == ( const set_of_numbers & set_2 ) const
+template<typename T>
+bool set_of_numbers<T>::operator == ( const set_of_numbers<T>& set_2 ) const
 {
 
     if ( this->count != set_2.count ) return false;
@@ -368,7 +342,8 @@ bool set_of_numbers::operator == ( const set_of_numbers & set_2 ) const
 
 }
 
-bool set_of_numbers::operator != ( const set_of_numbers & set_2 ) const
+template<typename T>
+bool set_of_numbers<T>::operator != ( const set_of_numbers<T>& set_2 ) const
 {
 
     if ( this->count != set_2.count ) return true;
@@ -382,7 +357,8 @@ bool set_of_numbers::operator != ( const set_of_numbers & set_2 ) const
 
 }
 
-bool set_of_numbers::occurrence_of_elements( const set_of_numbers & set_2 ) const
+template<typename T>
+bool set_of_numbers<T>::occurrence_of_elements( const set_of_numbers<T>& set_2 ) const
 {
 
     for ( int i = 0; i < this->count; i++ )
@@ -395,13 +371,52 @@ bool set_of_numbers::occurrence_of_elements( const set_of_numbers & set_2 ) cons
 
 };
 
-ostream& operator << (ostream& os, const set_of_numbers& set)
+ostream& operator << ( ostream& os, const set_of_numbers<int>& set )
 {
 
     for ( int i = 0; i < set.count; i++ )
     {
 
         os << set.array[i] << " ";
+
+    }
+    return os;
+
+}
+
+ostream& operator << (ostream& os, const set_of_numbers<float>& set)
+{
+
+    for (int i = 0; i < set.count; i++)
+    {
+
+        os << set.array[i] << " ";
+
+    }
+    return os;
+
+}
+
+ostream& operator << (ostream& os, const set_of_numbers<string>& set)
+{
+
+    for (int i = 0; i < set.count; i++)
+    {
+
+        os << set.array[i] << " ";
+
+    }
+    return os;
+
+}
+
+ostream& operator << (ostream& os, const set_of_numbers<pair<int, double>>& set)
+{
+
+    for (int i = 0; i < set.count; i++)
+    {
+
+        os << "<" << set.array[i].first << ", " << set.array[i].second << ">" << " ";
 
     }
     return os;
